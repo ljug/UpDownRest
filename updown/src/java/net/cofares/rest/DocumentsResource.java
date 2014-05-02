@@ -6,6 +6,7 @@
 package net.cofares.rest;
 
 import com.dvmr.poc.exception.NotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +28,6 @@ import net.cofares.service.BlobService;
 import net.cofares.service.impl.BlobServiceImpl;
 import net.cofares.util.MultipartUtil;
 import net.cofares.xmlEntities.FileBean;
-
 
 /**
  * REST Web Service
@@ -76,19 +76,14 @@ public class DocumentsResource {
      * @throws Exception
      */
     @GET
-    @Path("download")
+    @Path("download/{blobKey}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response downloadFile(
-            @DefaultValue("empty") @QueryParam(value = "blobKey") String blobKey)
-            throws Exception {
-        if (blobKey.equals("empty")) {
-            throw new NotFoundException("blobKey cannot be empty!");
-        }
+    public byte[] downloadFile(
+            @PathParam(value = "blobKey") String blobKey) throws IOException {
 
         byte[] docStream = getBlobService().getBlob(blobKey);
-        return Response
-                .ok(docStream, MediaType.APPLICATION_OCTET_STREAM)
-                .header("content-disposition", "attachment; filename = " + blobKey).build();
+        return docStream;
+        //return blobKey.getBytes();
     }
 
     /**
@@ -101,9 +96,9 @@ public class DocumentsResource {
     @Path("list")
     @Produces({MediaType.APPLICATION_JSON})
     public List<FileBean> listFiles() {
-       
+
         List<FileBean> list = getBlobService().getBlobs();
-        
+
         return list;
     }
 
@@ -125,9 +120,9 @@ public class DocumentsResource {
         getBlobService().deleteBlob(blobKey);
         return Response.status(Response.Status.OK).build();
     }
-    
+
     @GET
-   @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
     public String getDirectoryLoc() {
         return blobService.getDirctoryLoation();
     }

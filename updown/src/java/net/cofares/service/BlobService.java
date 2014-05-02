@@ -1,5 +1,6 @@
 package net.cofares.service;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface BlobService {
 	 * @param blobKey
 	 * @return
 	 */
-	public byte[] getBlob(String blobKey);
+	public byte[] getBlob(String blobKey)  throws IOException;
 	
 	/**
 	 * Deletes file form the directory

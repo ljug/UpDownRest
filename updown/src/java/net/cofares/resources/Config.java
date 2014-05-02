@@ -11,6 +11,6 @@ package net.cofares.resources;
  * @author pascalfares
  */
 public class Config {
-   public static final String directoryLocation = "/home/pascalfares/docs";
-   public static final String[] validFileExtentions={"gif","jpg","JPG","png","txt","jpeg"};
+   public static final String directoryLocation = "/home/pascalfares/docs/";
+   public static final String[] validFileExtentions={"sh", "gif","jpg","JPG","png","txt","jpeg"};
 }

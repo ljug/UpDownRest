@@ -50,14 +50,10 @@ public class BlobServiceImpl implements BlobService {
 	/**
 	 * 
 	 */
-	public byte[] getBlob(String blobKey) {
+	public byte[] getBlob(String blobKey) throws IOException {
 		File file = new File(getDirctoryLoation()+ blobKey);
 		byte[] docStream = null;
-		try {
-			docStream = FileUtils.readFileToByteArray(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		docStream = FileUtils.readFileToByteArray(file);		
 		return docStream;
 	}
 
