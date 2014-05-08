@@ -33,5 +33,5 @@ public interface BlobService {
 	 */
 	public List<FileBean> getBlobs();
         
-        public String getDirctoryLoation();
+        public String getDirctoryLocation();
 }

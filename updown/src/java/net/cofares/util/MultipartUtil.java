@@ -1,5 +1,6 @@
 package net.cofares.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
@@ -16,47 +17,44 @@ import net.cofares.xmlEntities.FileBean;
 import net.cofares.service.BlobService;
 
 /**
- * 
+ *
  * @author vreddy.fp
+ * @author cofares.net
  *
  */
 public class MultipartUtil {
 
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
-	public static FileBean parseMultipart(HttpServletRequest request, BlobService blobService){
-		FileBean bean = null;
-		if (ServletFileUpload.isMultipartContent(request)) { 
-			bean = new FileBean();
+    /**
+     *
+     * @param request
+     * @return
+     */
+    public static FileBean parseMultipart(HttpServletRequest request, BlobService blobService) throws IOException, FileUploadException {
+        FileBean bean = null;
+        if (ServletFileUpload.isMultipartContent(request)) {
+            bean = new FileBean();
             ServletFileUpload uploadHandler = new ServletFileUpload();
             InputStream stream = null;
             bean.setFormFieldsMap(new HashMap<String, String>());
             try {
                 FileItemIterator itr = uploadHandler.getItemIterator(request);
-                while(itr.hasNext()) {
-                	FileItemStream item = itr.next();
-                	String name = item.getFieldName(); // form field name
+                while (itr.hasNext()) {
+                    FileItemStream item = itr.next();
+                    String name = item.getFieldName(); // form field name
                     stream = item.openStream();
-                    if(item.isFormField()) {
-                    	String value = Streams.asString(stream);
-                    	bean.getFormFieldsMap().put(name, value);
+                    if (item.isFormField()) {
+                        String value = Streams.asString(stream);
+                        bean.getFormFieldsMap().put(name, value);
                     } else {
-                     	 bean.setFilename(item.getName());
-                         bean.setContentType(item.getContentType());
-                         bean.setSize(blobService.uploadBlob(stream, item.getName()));
+                        bean.setFilename(item.getName());
+                        bean.setContentType(item.getContentType());
+                        bean.setSize(blobService.uploadBlob(stream, item.getName()));
                     }
                 }
-            }catch(FileUploadException ex) {
-            	ex.printStackTrace();
-            } catch(Exception ex) {
-            	ex.printStackTrace();
-            }finally{
-            	IOUtils.closeQuietly(stream);
+            } finally {
+                IOUtils.closeQuietly(stream);
             }
-        } 
-		return bean;
-	}
+        }
+        return bean;
+    }
 }

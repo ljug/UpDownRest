@@ -34,7 +34,7 @@ public class BlobServiceImpl implements BlobService {
 			filename = FilenameUtils.getName(filename);
 			//output = new FileWriter(new File(getDirctoryLoation()+ filename));
 			//IOUtils.copy(countingInputStream, output);
-			output = new FileOutputStream(new File(getDirctoryLoation()+ filename));
+			output = new FileOutputStream(new File(getDirctoryLocation()+ filename));
 			countingInputStream = new CountingInputStream(inputStream);
 			IOUtils.copyLarge(countingInputStream, output);
 			filesize = countingInputStream.getByteCount();
@@ -51,14 +51,14 @@ public class BlobServiceImpl implements BlobService {
 	 * 
 	 */
 	public byte[] getBlob(String blobKey) throws IOException {
-		File file = new File(getDirctoryLoation()+ blobKey);
+		File file = new File(getDirctoryLocation()+ blobKey);
 		byte[] docStream = null;
 		docStream = FileUtils.readFileToByteArray(file);		
 		return docStream;
 	}
 
 	public void deleteBlob(String blobKey) {
-		FileUtils.deleteQuietly(new File(getDirctoryLoation()+ blobKey));
+		FileUtils.deleteQuietly(new File(getDirctoryLocation()+ blobKey));
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class BlobServiceImpl implements BlobService {
 	
 		List<FileBean> list = new ArrayList<FileBean>();
 		Iterator<File> files = FileUtils.iterateFiles(
-				new File(getDirctoryLoation()),
+				new File(getDirctoryLocation()),
 				getValidFileExtentions(),
 				false);
 
@@ -84,7 +84,7 @@ public class BlobServiceImpl implements BlobService {
 		return list;
 	}
 
-	public String getDirctoryLoation() {
+	public String getDirctoryLocation() {
 		return net.cofares.resources.Config.directoryLocation;
 	}
 
