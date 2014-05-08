@@ -1,5 +1,13 @@
 package com.dvmr.poc.rest;
 
+import com.dvmr.poc.bean.FileBean;
+import com.dvmr.poc.exception.NotFoundException;
+import com.dvmr.poc.service.BlobService;
+import com.dvmr.poc.service.impl.BlobServiceImpl;
+import com.dvmr.poc.util.MultipartUtil;
+import com.sun.jersey.multipart.FormDataBodyPart;
+import com.sun.jersey.multipart.FormDataMultiPart;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,15 +24,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
-
-import com.dvmr.poc.bean.FileBean;
-import com.dvmr.poc.exception.NotFoundException;
-import com.dvmr.poc.service.BlobService;
-import com.dvmr.poc.service.impl.BlobServiceImpl;
-import com.dvmr.poc.util.MultipartUtil;
 
 /**
  * This rest based document service
@@ -53,16 +54,21 @@ public class DocumentService {
 	@Path("upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response uploadFile(@Context HttpServletRequest request,
-			@Context HttpServletResponse res) throws Exception {
-		String response = "Unable to attach files";
-		FileBean bean = MultipartUtil.parseMultipart(request, getBlobService());
-		if (null != bean) {
-			response = "{\"name\":\"" + bean.getFilename() + "\",\"type\":\""
-			+ bean.getContentType() + "\",\"size\":\"" + bean.getSize()
-			+ "\"}";
-		}
-		return Response.ok(response).build();
+	public Response uploadFile(FormDataMultiPart form) throws Exception {
+		FormDataBodyPart filePart = form.getField("file");
+	 
+	         filePart.getContentDisposition().getFileName();
+	 
+	         InputStream fileInputStream = filePart.getValueAs(InputStream.class);
+	 
+	         String filePath = ;
+	 
+	        // save the file to the server
+	        saveFile(fileInputStream, filePath);
+	 
+	        String output = "File saved to server location using FormDataMultiPart : " + filePath;
+	 
+	        return Response.status(200).entity(output).build();
 	}
 
 	/**

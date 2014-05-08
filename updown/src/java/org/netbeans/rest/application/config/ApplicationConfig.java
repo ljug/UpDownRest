@@ -32,7 +32,6 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         
         resources.add(net.cofares.rest.DocumentsResource.class);
-        resources.add(test.GenericResource.class);
        
      
     }
